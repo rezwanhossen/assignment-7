@@ -73,3 +73,101 @@ Example:
 SELECT * FROM employees LIMIT 5 OFFSET (0*5)
 SELECT * FROM employees LIMIT 5 OFFSET (1*5)
 ```
+
+### 7.How can you modify data using UPDATE statements?
+
+PostgreSQL এ update স্টেটমেন্ট ব্যবহার করে আমরা টেবিলের ডাটা সংশোধন করতে পারি এবং এটি একটি খুবই সাধারণ এবং গুরুত্বপূর্ণ স্টেটমেন্ট যখন আমরা কোন টেবিলে বিদ্যমান রেকর্ড পরিবর্তন করতে চাই। যদি টেবিলের কোন ডাটা বা কলাম কোন ডাটা আমরা পরিবর্তন করতে চাই অথবা কোন ভুল ডাটা চেঞ্জ করতে চাই তখন আমরা আপডেট স্টেটমেন্টটি ইউজ করি। আপডেট স্টেটমেন্ট ব্যবহারের সময় যদি হয় এর সত্য ভোট দেওয়া হয় তবে ডাটা সেট এর ডাটা পরিবর্তন হয়ে যায়।
+Example:
+
+```
+UPDATE employees
+SET salary = 65000, department = 'HR'
+WHERE name = 'John';
+
+```
+
+একাধিক কলাম আপডেট করা এখানে john নামের কর্মের সেলারি এবং ডিপার্টমেন্ট চেঞ্জ হয়ে যাবে।
+
+### 8.What is the significance of the JOIN operation, and how does it work in PostgreSQL?
+
+জয়েন অপারেশন কি ব্যবহার করে আমরা দুইটি টেবিলকে একইসঙ্গে merce করতে পারি। জয়েন রিলেশনাল ডাটাবেজ এর ক্ষেত্রে একটি শক্তিশালী বৈশিষ্ট্য বহন করে। জয়েন অপারেশনের বিভিন্ন প্রকার রয়েছে যেমন :
+
+- ইনার জয়েন্ট: এটি শুধুমাত্র সেই রো ফেরত দেয় যেগুলোর মধ্যে দুটি টেবিলের মধ্যে মেশিন মান থাকে। example:
+
+```
+SELECT books.title
+FROM books
+INNER JOIN orders
+ON books.books_id = orders.order_id;
+
+```
+
+- লেফট জয়েন্ট: এটি প্রথম টেবিলের সব্র এবং দ্বিতীয় টেবিল এর সাথে মিল পাওয়া রো ফেরত দেয়। যদি দ্বিতীয় টেবিল এর সাথে কোন মিল না পাওয়া যায় তবে দ্বিতীয় টেবিলে কলামগুলোতে নাল মান বসিয়ে দেয়।example:
+
+```
+SELECT books.title
+FROM books
+LEFT JOIN orders
+ON books.books_id = orders.order_id;
+
+```
+
+- রাইট জয়েন্ট: এটি দ্বিতীয় টেবিল এর সবগুলো এবং প্রথম টেবিল এর সাথে মিল পাওয়া রোগ ফেরত দেয়। যদি প্রথম টেবিলের সাথে কোন মিল পাওয়া না যায় সে ক্ষেত্রে প্রথম টেবিলের কলামগুলোতে নাল মান বসিয়ে দেয়।
+  example:
+
+```
+SELECT books.title
+FROM books
+RIGHT JOIN orders
+ON books.books_id = orders.order_id;
+
+```
+
+- ফুল জয়েন: এটি উভয় টেবিলের সব রো দেয় এবং যেখানে মিল পাওয়া যায় সেখানে ডাটা যোগ করে যদি কোন টেবিলের মধ্যে মিল পাওয়া না যায় সেখানে নাল বসিয়ে দেয়।example:
+
+```
+SELECT books.title
+FROM books
+FULL JOIN orders
+ON books.books_id = orders.order_id;
+
+```
+
+### 9.Explain the GROUP BY clause and its role in aggregation operations.
+
+GROUP BY clause SQL-এ ব্যবহৃত হয় ডেটাকে একটি নির্দিষ্ট কলাম বা কলামগুলির ভিত্তিতে গ্রুপ করতে। এটি সাধারণত এগ্রিগেট ফাংশন (যেমন COUNT(), SUM(), AVG(), MAX(),MIN()) এর সাথে ব্যবহৃত হয়, যা প্রতিটি গ্রুপের জন্য একটি একক মান তৈরি করতে সাহায্য করে। GROUP BY কলামের জন্য সব নির্বাচিত কলাম বা এগ্রিগেট ফাংশন থাকতে হবে।
+যখন আপনি গ্রুপিং করেন, তখন SELECT ক্লজে শুধুমাত্র সেই কলামগুলো রাখতে হবে যেগুলোর উপর গ্রুপিং করা হয়েছে অথবা যেগুলোর উপর এগ্রিগেট ফাংশন প্রয়োগ করা হয়েছে।Example:
+
+```
+SELECT COUNT(customer_id), country
+FROM customers
+GROUP BY country;
+```
+
+### 10.How can you calculate aggregate functions like COUNT(), SUM(), and AVG() in PostgreSQL?
+
+এগ্রিগেট ফাংশন যেমন COUNT(), SUM(), এবং AVG() ব্যবহৃত হয় একাধিক রুয়ের উপর গাণিতিক কাজ করার জন্য এবং এটি একটি মান রিটার্ন করেন। এগুলো গ্রুপ বাই ক্লজের সাথে ব্যবহার করা হয় যাতে নির্দিষ্ট কলামের ভিত্তিতে ডাটা গ্রুপ করা যায়।
+
+- Count() এর কাজ হল নির্দিষ্ট শর্ত বা রেকর্ডের সংখ্যা গণনা করা।
+  example:
+
+```
+SELECT count(salary) FROM employees;
+
+```
+
+- Sum() এর মূল কাজ হল কোন কলামের সব মান যোগ করে একটি সংখ্যা প্রদান করা।
+  example:
+
+```
+SELECT SUM(sales_amount) FROM sales;
+
+```
+
+- Avg() এর মূল কাজ হল কলামের গড় মান নির্ণয় করা।
+  example:
+
+```
+SELECT Avg(sales_amount) FROM sales;
+
+```
